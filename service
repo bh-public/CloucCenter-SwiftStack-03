@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# Swiftstack service
+#
+
+. /utils.sh
+
+curl -i -H 'x-auth-user:Bill' -H 'x-auth-key:harper'  http://184.94.251.119/auth/v1.0 | grep X-Auth-Token: > pre-token
+cut -c15- pre-token > token
+cat token
+export TOKEN=$(cat token)
+curl -X PUT -H 'X-Auth-Token: '$TOKEN'' http://184.94.251.119/v1/AUTH_Bill/cisco-abc
