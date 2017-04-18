@@ -5,8 +5,22 @@
 
 . /utils.sh
 
+print_log "$(env)"
+
+if [ -n "$gitTag" ]; then
+    agentSendLogMessage  "Found gitTag parameter gitTag = ${gitTag}"
+else
+     agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
+     gitTag="swiftstack container create"
+fi
+print_log "INVOKE - Swift Service to make a container (curl)"
+
+print_log "FIRST - Lets authencate to the API endpoint"
 curl -i -H 'x-auth-user:Bill' -H 'x-auth-key:harper'  http://184.94.251.119/auth/v1.0 | grep X-Auth-Token: > pre-token
+print_log "EXTRACT - The swiftstack token"
 cut -c15- pre-token > token
 cat token
 export TOKEN=$(cat token)
+print_log "CREATE - the swiftstack container"
 curl -X PUT -H 'X-Auth-Token: '$TOKEN'' http://184.94.251.119/v1/AUTH_Bill/cisco-abc
+print_log "CREATED - the container request was created" "
