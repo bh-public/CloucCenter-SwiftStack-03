@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 #
-# Swiftstack service
-#
+# Swiftstack service for Cisco Cloud Center
+# Author: Bill Harper
+# Purpose: Use case to make a container in an existing swiftstack object store.
+# Parameters: 
+#		$API (api endpoint)
+# 		$CONTAINER (for Container Name) 
+#		$USER (swift user)
+#		$PASSWD (password) 
 
 . /utils.sh
 
@@ -13,7 +19,7 @@ else
      agentSendLogMessage  "Didn't find custom parameter gitTag. Using gitTag=master"
      gitTag="swiftstack container create"
 fi
-print_log "INVOKE - Swift Service to make a container (curl)"
+print_log "EXTERNAL SERVICE - Swift Service to make a container (curl)"
 
 print_log "FIRST - Lets authencate to the API endpoint"
 curl -i -H 'x-auth-user:Bill' -H 'x-auth-key:harper'  http://184.94.251.119/auth/v1.0 | grep X-Auth-Token: > pre-token
@@ -22,5 +28,5 @@ cut -c15- pre-token > token
 cat token
 export TOKEN=$(cat token)
 print_log "CREATE - the swiftstack container"
-curl -X PUT -H 'X-Auth-Token: '$TOKEN'' http://184.94.251.119/v1/AUTH_Bill/cisco-abc
-print_log "CREATED - the container request was created" "
+curl -X PUT -H 'X-Auth-Token: '$TOKEN'' http://184.94.251.119/v1/AUTH_Bill/$CONTAINER
+print_log "CREATED - the container request was created" 
